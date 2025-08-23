@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Test Detection System</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+      }
+      .test-section {
+        margin: 20px 0;
+        padding: 15px;
+        border: 1px solid #ccc;
+      }
+      .result {
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+      }
+      .success {
+        background-color: #d4edda;
+      }
+      .error {
+        background-color: #f8d7da;
+      }
+      .info {
+        background-color: #d1ecf1;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>AI Outfit Rater - Detection System Test</h1>
+
+    <div class="test-section">
+      <h2>System Status</h2>
+      <div id="status">Testing...</div>
+    </div>
+
+    <div class="test-section">
+      <h2>Upload Test</h2>
+      <input type="file" id="fileInput" accept="image/*" />
+      <button onclick="testFile()">Test Detection</button>
+      <div id="testResults"></div>
+    </div>
+
+    <script type="module">
+      // Test system availability
+      async function testSystems() {
+        const statusDiv = document.getElementById("status");
+        let status = [];
+
+        // Test Hugging Face
+        try {
+          const response = await fetch(
+            "https://api-inference.huggingface.co/models/google/vit-base-patch16-224",
+            {
+              method: "POST",
+              body: new FormData(),
+            }
+          );
+          status.push(
+            `<div class="result ${
+              response.ok ? "success" : "error"
+            }">Hugging Face API: ${response.status}</div>`
+          );
+        } catch (error) {
+          status.push(
+            `<div class="result error">Hugging Face API: Error - ${error.message}</div>`
+          );
+        }
+
+        // Test TensorFlow.js
+        try {
+          const tf = await import(
+            "https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@latest/dist/tf.min.js"
+          );
+          status.push(
+            `<div class="result success">TensorFlow.js: Available</div>`
+          );
+        } catch (error) {
+          status.push(
+            `<div class="result error">TensorFlow.js: Error - ${error.message}</div>`
+          );
+        }
+
+        // Test local API
+        try {
+          const response = await fetch("/api/analyze", { method: "GET" });
+          status.push(
+            `<div class="result ${
+              response.status === 405 ? "success" : "error"
+            }">Local API: ${response.status}</div>`
+          );
+        } catch (error) {
+          status.push(
+            `<div class="result error">Local API: Error - ${error.message}</div>`
+          );
+        }
+
+        statusDiv.innerHTML = status.join("");
+      }
+
+      // Test file detection
+      window.testFile = function () {
+        const fileInput = document.getElementById("fileInput");
+        const resultsDiv = document.getElementById("testResults");
+
+        if (!fileInput.files[0]) {
+          resultsDiv.innerHTML =
+            '<div class="result error">Please select a file first</div>';
+          return;
+        }
+
+        const file = fileInput.files[0];
+        resultsDiv.innerHTML = `<div class="result info">Testing file: ${file.name} (${file.size} bytes, ${file.type})</div>`;
+
+        // Basic analysis
+        const img = new Image();
+        img.onload = function () {
+          const analysis = {
+            width: img.width,
+            height: img.height,
+            aspectRatio: img.width / img.height,
+            filename: file.name.toLowerCase(),
+          };
+
+          let results = [
+            `<div class="result info">Basic Analysis: ${img.width}x${
+              img.height
+            }, aspect ratio: ${analysis.aspectRatio.toFixed(2)}</div>`,
+          ];
+
+          // Simple filename analysis
+          const nonOutfitKeywords = ["screenshot", "screen", "logo", "icon"];
+          const outfitKeywords = ["selfie", "photo", "outfit", "style"];
+
+          const hasNonOutfit = nonOutfitKeywords.some((k) =>
+            analysis.filename.includes(k)
+          );
+          const hasOutfit = outfitKeywords.some((k) =>
+            analysis.filename.includes(k)
+          );
+
+          if (hasNonOutfit) {
+            results.push(
+              '<div class="result error">Filename suggests: NOT an outfit</div>'
+            );
+          } else if (hasOutfit) {
+            results.push(
+              '<div class="result success">Filename suggests: Likely an outfit</div>'
+            );
+          } else {
+            results.push('<div class="result info">Filename: Neutral</div>');
+          }
+
+          // Size analysis
+          if (img.width < 150 || img.height < 150) {
+            results.push(
+              '<div class="result error">Size: Too small (likely icon/logo)</div>'
+            );
+          } else if (
+            img.width > 1200 &&
+            img.height > 600 &&
+            Math.abs(img.width / img.height - 16 / 9) < 0.1
+          ) {
+            results.push(
+              '<div class="result error">Size: Likely screenshot</div>'
+            );
+          } else {
+            results.push(
+              '<div class="result success">Size: Appropriate for outfit photo</div>'
+            );
+          }
+
+          resultsDiv.innerHTML += results.join("");
+        };
+
+        img.src = URL.createObjectURL(file);
+      };
+
+      // Run tests on load
+      testSystems();
+    </script>
+  </body>
+</html>
