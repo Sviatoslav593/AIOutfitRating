@@ -1,0 +1,11 @@
+# Next.js
+.next/
+out/
+build/
+
+# Node modules
+node_modules/
+
+# Cache and temporary files
+*.cache
+*.pack.gz
