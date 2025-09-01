@@ -42,7 +42,7 @@ export default function App({ Component, pageProps }) {
         <meta name="msvalidate.01" content="YOUR_BING_VERIFICATION_CODE_HERE" />
 
         {/* Canonical URL */}
-        <link rel="canonical" href="https://outfitrater.online" />
+        <link rel="canonical" href="https://www.outfitrater.online" />
 
         {/* Open Graph / Facebook */}
         <meta property="og:type" content="website" />
@@ -55,10 +55,10 @@ export default function App({ Component, pageProps }) {
           property="og:description"
           content="Get instant AI-powered fashion analysis! Upload your outfit photo for professional style rating, detailed metrics, and personalized feedback. Free and fun TikTok-style results!"
         />
-        <meta property="og:url" content="https://outfitrater.online" />
+        <meta property="og:url" content="https://www.outfitrater.online" />
         <meta
           property="og:image"
-          content="https://outfitrater.online/favicon.svg"
+          content="https://www.outfitrater.online/favicon.svg"
         />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
@@ -80,10 +80,10 @@ export default function App({ Component, pageProps }) {
           property="twitter:description"
           content="Get instant AI-powered fashion analysis! Upload your outfit photo for professional style rating and detailed metrics. Free TikTok-style results!"
         />
-        <meta property="twitter:url" content="https://outfitrater.online" />
+        <meta property="twitter:url" content="https://www.outfitrater.online" />
         <meta
           property="twitter:image"
-          content="https://outfitrater.online/favicon.svg"
+          content="https://www.outfitrater.online/favicon.svg"
         />
         <meta
           property="twitter:image:alt"
@@ -101,7 +101,7 @@ export default function App({ Component, pageProps }) {
               alternateName: "Outfit Rater",
               description:
                 "AI-powered fashion analysis tool that provides instant style ratings, detailed metrics, and personalized feedback for your outfit photos.",
-              url: "https://outfitrater.online",
+              url: "https://www.outfitrater.online",
               applicationCategory: "Fashion & Style",
               operatingSystem: "Web Browser",
               offers: {

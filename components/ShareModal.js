@@ -15,7 +15,7 @@ const ShareModal = ({
   const shareImageRef = useRef(null);
 
   // Create shareable content
-  const websiteUrl = "https://outfitrater.online";
+  const websiteUrl = "https://www.outfitrater.online";
   const shareText = `Check out my outfit score! I got ${rating}/10 on AI Outfit Rater! 🔥 Try rating your outfit too: ${websiteUrl}`;
   const shortShareText = `My outfit got ${rating}/10! 🔥 Rate yours:`;
 
