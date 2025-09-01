@@ -1,0 +1,17 @@
+{
+  "name": "AI Outfit Rater",
+  "short_name": "Outfit Rater",
+  "description": "Upload your outfit and get an AI rating! Get a professional assessment of your style in seconds.",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml"
+    }
+  ],
+  "theme_color": "#FF0050",
+  "background_color": "#0D0D0D",
+  "display": "standalone",
+  "start_url": "/",
+  "scope": "/"
+}

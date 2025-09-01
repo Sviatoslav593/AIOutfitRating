@@ -80,18 +80,18 @@ const UploadForm = ({ onUpload, onUploadStart }) => {
       }
 
       // Debug logging
-      console.log("=== ДЕТАЛЬНИЙ АНАЛІЗ ЗОБРАЖЕННЯ ===");
-      console.log("1. Базовий аналіз:", outfitCheck);
-      console.log("2. AI результат:", freeAPIResult);
+      console.log("=== DETAILED IMAGE ANALYSIS ===");
+      console.log("1. Basic analysis:", outfitCheck);
+      console.log("2. AI result:", freeAPIResult);
       if (freeAPIResult) {
-        console.log("3. AI деталі:", {
+        console.log("3. AI details:", {
           isOutfit: freeAPIResult.isOutfit,
           confidence: freeAPIResult.confidence,
           reasoning: freeAPIResult.reasoning,
           source: freeAPIResult.source,
         });
       }
-      console.log("4. Файл:", {
+      console.log("4. File:", {
         name: selectedFile.name,
         size: selectedFile.size,
         type: selectedFile.type,
@@ -101,9 +101,9 @@ const UploadForm = ({ onUpload, onUploadStart }) => {
       let shouldStop = false;
       let stopReason = null;
 
-      console.log("=== ЛОГІКА ДЕТЕКЦІЇ ===");
+      console.log("=== DETECTION LOGIC ===");
 
-      // Якщо AI API каже "не аутфіт" з РЕАЛЬНОЮ впевненістю (не 0) - блокуємо
+      // If AI API says "not outfit" with REAL confidence (not 0) - block
       if (
         freeAPIResult &&
         !freeAPIResult.isOutfit &&
@@ -111,27 +111,27 @@ const UploadForm = ({ onUpload, onUploadStart }) => {
       ) {
         shouldStop = true;
         stopReason = `ai_detected_non_outfit (${freeAPIResult.source}, confidence: ${freeAPIResult.confidence})`;
-        console.log("🚫 AI каже НЕ АУТФІТ з впевненістю - блокуємо");
+        console.log("🚫 AI says NOT OUTFIT with confidence - blocking");
       }
-      // Якщо AI каже "не аутфіт" але з нульовою впевненістю - ігноруємо
+      // If AI says "not outfit" but with zero confidence - ignore
       else if (
         freeAPIResult &&
         !freeAPIResult.isOutfit &&
         freeAPIResult.confidence <= 0.1
       ) {
         console.log(
-          "⚠️ AI каже НЕ АУТФІТ але з нульовою впевненістю - ігноруємо і пропускаємо"
+          "⚠️ AI says NOT OUTFIT but with zero confidence - ignoring and allowing"
         );
       }
-      // Якщо AI недоступний, перевіряємо базовий аналіз
+      // If AI is unavailable, check basic analysis
       else if (!freeAPIResult && !outfitCheck.isOutfit) {
         shouldStop = true;
         stopReason = `basic_analysis_non_outfit (${outfitCheck.reason})`;
-        console.log("🚫 Базовий аналіз каже НЕ АУТФІТ - блокуємо");
+        console.log("🚫 Basic analysis says NOT OUTFIT - blocking");
       }
-      // Інакше - пропускаємо
+      // Otherwise - allow
       else {
-        console.log("✅ Пропускаємо до OpenAI API");
+        console.log("✅ Allowing to OpenAI API");
       }
 
       if (shouldStop) {
@@ -304,37 +304,37 @@ const UploadForm = ({ onUpload, onUploadStart }) => {
 
 // Helper function to generate descriptions for non-outfit images
 function getNotOutfitDescription(reason, freeAPIResult) {
-  // Пріоритет AI результатам, якщо вони є
+  // Priority to AI results if available
   if (freeAPIResult && freeAPIResult.reasoning && !freeAPIResult.isOutfit) {
     const topLabel =
       freeAPIResult.topLabels?.[0]?.label ||
       freeAPIResult.topPredictions?.[0]?.className ||
-      "об'єкт";
+      "object";
 
     switch (freeAPIResult.reasoning) {
       case "object_detected":
-        return `🚫 AI виявив предмет "${topLabel}", який не є аутфітом. Завантажте фото людини в одязі для аналізу стилю.`;
+        return `🚫 AI detected an object "${topLabel}" that is not an outfit. Please upload a photo of a person in clothing for style analysis.`;
       case "no_person_detected":
-        return `👤 На фото немає людини. Для оцінки стилю потрібне фото людини в аутфіті, а не окремих речей чи аксесуарів.`;
+        return `👤 No person found in the photo. Style rating requires a photo of a person in an outfit, not separate items or accessories.`;
       case "no_clothing_detected":
-        return `👔 Виявлено людину, але не видно одягу для аналізу. Завантажте фото де видно аутфіт повністю.`;
+        return `👔 Person detected, but no clothing visible for analysis. Please upload a photo where the outfit is fully visible.`;
       case "non_clothing_detected":
-        return `❌ AI виявив "${topLabel}", який не підходить для аналізу стилю. Потрібне фото людини в одязі.`;
+        return `❌ AI detected "${topLabel}" which is not suitable for style analysis. A photo of a person in clothing is needed.`;
       case "outfit_detected":
-        // Це не повинно статися, але на всякий випадок
-        return `⚠️ AI детектував аутфіт, але базова перевірка не пройшла. Спробуйте іншу фотографію.`;
+        // This shouldn't happen, but just in case
+        return `⚠️ AI detected an outfit, but basic validation failed. Please try another photo.`;
     }
   }
 
-  // Fallback до базових описів
+  // Fallback to basic descriptions
   const descriptions = {
     screenshot:
-      "📱 Це схоже на скріншот екрана. Будь ласка, завантажте фото людини в одязі для аналізу стилю.",
-    icon: "🖼️ Це схоже на іконку або логотип. Для оцінки стилю потрібне фото людини в повний зріст або портрет з одягом.",
+      "📱 This looks like a screenshot. Please upload a photo of a person in clothing for style analysis.",
+    icon: "🖼️ This looks like an icon or logo. Style rating requires a full-body photo or portrait with clothing.",
     monochrome:
-      "🎨 Зображення має дуже мало кольорів. Завантажте, будь ласка, кольорове фото аутфіту для кращого аналізу.",
+      "🎨 The image has very few colors. Please upload a colorful outfit photo for better analysis.",
     low_confidence:
-      "❓ Не можу впевнено визначити аутфіт на цьому зображенні. Спробуйте фото людини в одязі з кращою якістю.",
+      "❓ Cannot confidently identify an outfit in this image. Please try a higher quality photo of a person in clothing.",
   };
 
   return descriptions[reason] || descriptions.low_confidence;

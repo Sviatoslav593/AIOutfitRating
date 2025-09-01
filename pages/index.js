@@ -77,7 +77,7 @@ export default function Home() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.4 }}
             >
-              Завантаж свій outfit та дізнайся рейтинг від AI! ✨
+              Upload your outfit and get an AI rating! ✨
             </motion.p>
 
             <motion.p
@@ -86,7 +86,7 @@ export default function Home() {
               animate={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.6 }}
             >
-              Отримай професійну оцінку свого стилю за секунди
+              Get a professional assessment of your style in seconds
             </motion.p>
           </motion.header>
 

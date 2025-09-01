@@ -83,12 +83,12 @@ function analyzeHuggingFaceResults(results) {
     "landscape",
     "nature",
     "object",
-    "bag", // Додаємо сумки
+    "bag", // Adding bags
     "handbag",
     "purse",
     "backpack",
     "luggage",
-    "shoe", // Окремо взуття без людини
+    "shoe", // Separate footwear without person
     "boot",
     "sneaker",
     "sandal",
@@ -102,23 +102,23 @@ function analyzeHuggingFaceResults(results) {
     const label = result.label.toLowerCase();
     const score = result.score;
 
-    // Перевіряємо наявність людини
+    // Check for human presence
     if (humanKeywords.some((keyword) => label.includes(keyword))) {
       humanScore += score;
     }
 
-    // Перевіряємо наявність одягу
+    // Check for clothing presence
     if (clothingKeywords.some((keyword) => label.includes(keyword))) {
       clothingScore += score;
     }
 
-    // Перевіряємо не-аутфіт об'єкти
+    // Check for non-outfit objects
     if (nonOutfitKeywords.some((keyword) => label.includes(keyword))) {
       nonOutfitScore += score;
     }
   });
 
-  // Для аутфіту потрібні ОБА: людина І одяг (м'якіші пороги)
+  // For outfit need BOTH: person AND clothing (softer thresholds)
   const isOutfit =
     humanScore > 0.15 && clothingScore > 0.05 && nonOutfitScore < 0.6;
 
@@ -133,9 +133,9 @@ function analyzeHuggingFaceResults(results) {
     reasoning = "outfit_detected";
   }
 
-  // Якщо всі скори дуже низькі - не довіряємо результату
+  // If all scores are very low - don't trust the result
   const maxScore = Math.max(humanScore, clothingScore, nonOutfitScore);
-  const finalConfidence = maxScore < 0.1 ? 0.01 : maxScore; // Дуже низька впевненість
+  const finalConfidence = maxScore < 0.1 ? 0.01 : maxScore; // Very low confidence
 
   return {
     isOutfit,

@@ -82,7 +82,7 @@ async function analyzeOutfitWithOpenAI(base64Image, mimeType) {
           content: [
             {
               type: "text",
-              text: 'Проаналізуй фото аутфіту й поверни СТРОГИЙ JSON: {"rating": число 1-10, "style": коротка категорія, "description": 1–2 насичені, унікальні речення українською з конкретикою. Без додаткового тексту поза JSON.}',
+              text: 'Analyze the outfit photo and return STRICT JSON: {"rating": number 1-10, "style": short category, "description": 1-2 rich, unique sentences in English with specifics. No additional text outside JSON.}',
             },
             {
               type: "image_url",
@@ -111,7 +111,7 @@ async function analyzeOutfitWithOpenAI(base64Image, mimeType) {
     throw new Error("No response from OpenAI");
   }
 
-  // Якщо відповідь загорнута у ```json ... ```
+  // If response is wrapped in ```json ... ```
   const fenced = content.match(/```(?:json)?\s*([\s\S]*?)\s*```/i);
   const jsonText = fenced ? fenced[1].trim() : content;
 
@@ -119,7 +119,7 @@ async function analyzeOutfitWithOpenAI(base64Image, mimeType) {
   try {
     analysis = JSON.parse(jsonText);
   } catch {
-    // Дбайливий фолбек: витягуємо оцінку/стиль з тексту й беремо перші 220 символів як опис
+    // Careful fallback: extract rating/style from text and take first 220 characters as description
     return {
       rating: extractRatingFromText(content),
       style: extractStyleFromText(content),
@@ -127,7 +127,7 @@ async function analyzeOutfitWithOpenAI(base64Image, mimeType) {
     };
   }
 
-  // Валідація структури та значень
+  // Validate structure and values
   const rating = Number.parseInt(analysis.rating, 10);
   const style = String(analysis.style || "").trim();
   const description = String(analysis.description || "").trim();

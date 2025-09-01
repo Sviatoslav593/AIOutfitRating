@@ -8,7 +8,7 @@
 export function simpleOutfitAnalysis(file, imageAnalysis) {
   const filename = file.name.toLowerCase();
 
-  // Check filename for obvious non-outfit indicators - ТІЛЬКИ найочевидніші
+  // Check filename for obvious non-outfit indicators - ONLY the most obvious
   const nonOutfitKeywords = [
     "screenshot",
     "screen",
@@ -46,11 +46,11 @@ export function simpleOutfitAnalysis(file, imageAnalysis) {
   );
 
   // Combine filename analysis with basic image analysis
-  let confidence = 0.9; // МАКСИМАЛЬНО оптимістично
+  let confidence = 0.9; // MAXIMALLY optimistic
   let reasoning = "basic_analysis";
 
   if (hasNonOutfitKeyword) {
-    confidence = 0.05; // Тільки для ДУЖЕ очевидних випадків
+    confidence = 0.05; // Only for VERY obvious cases
     reasoning = "filename_suggests_non_outfit";
   } else if (hasOutfitKeyword) {
     confidence = 0.98;
@@ -63,24 +63,24 @@ export function simpleOutfitAnalysis(file, imageAnalysis) {
       imageAnalysis;
 
     if (isLikelyScreenshot || isLikelyIcon) {
-      confidence = Math.min(confidence, 0.15); // Тільки для ДУЖЕ очевидних
+      confidence = Math.min(confidence, 0.15); // Only for VERY obvious
       reasoning = "image_properties_suggest_non_outfit";
     } else {
-      // Майже завжди підвищуємо впевненість для звичайних зображень
+      // Almost always increase confidence for normal images
       confidence = Math.max(confidence, 0.95);
       if (reasoning === "basic_analysis") {
         reasoning = "image_properties_suggest_outfit";
       }
     }
 
-    // Бонус для будь-яких нормальних розмірів
+    // Bonus for any normal dimensions
     if (imageAnalysis.width >= 100 && imageAnalysis.height >= 100) {
       confidence = Math.max(confidence, 0.9);
     }
   }
 
   return {
-    isOutfit: confidence > 0.1, // ДУЖЕ низький поріг - практично завжди "так"
+    isOutfit: confidence > 0.1, // VERY low threshold - practically always "yes"
     confidence: confidence,
     reasoning: reasoning,
     source: "simple_analysis",

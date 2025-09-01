@@ -11,6 +11,10 @@ module.exports = {
         "tiktok-pink": "#FF0050",
         "tiktok-blue": "#25F4EE",
         "tiktok-black": "#161823",
+        "neon-pink": "#FF006E",
+        "neon-cyan": "#00F5D4",
+        "neon-purple": "#9B5DE5",
+        "neon-blue": "#00BBF9",
       },
       backgroundImage: {
         "gradient-tiktok": "linear-gradient(135deg, #FF0050 0%, #25F4EE 100%)",

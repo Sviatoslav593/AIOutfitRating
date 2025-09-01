@@ -1,8 +1,11 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import ShareModal from "./ShareModal";
+import StyleMetrics from "./StyleMetrics";
 
 const ResultCard = ({ file, analysisResult }) => {
   const [imageUrl, setImageUrl] = useState(null);
+  const [showShareModal, setShowShareModal] = useState(false);
 
   useEffect(() => {
     if (file) {
@@ -152,22 +155,39 @@ const ResultCard = ({ file, analysisResult }) => {
           {/* Action Buttons */}
           <div className="flex space-x-3 pt-2">
             <motion.button
+              onClick={() => setShowShareModal(true)}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="flex-1 bg-gradient-tiktok text-white py-3 px-4 rounded-xl font-semibold shadow-lg hover:shadow-xl transition-all duration-300"
             >
-              Share Result 📸
+              Share Result 🔗
             </motion.button>
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               className="flex-1 bg-gray-100 text-gray-700 py-3 px-4 rounded-xl font-semibold hover:bg-gray-200 transition-all duration-300"
+              onClick={() => window.location.reload()}
             >
               Try Another 🔄
             </motion.button>
           </div>
         </motion.div>
       </div>
+
+      {/* Style Metrics */}
+      <div className="mt-6">
+        <StyleMetrics analysisResult={analysisResult} rating={finalRating} />
+      </div>
+
+      {/* Share Modal */}
+      <ShareModal
+        isOpen={showShareModal}
+        onClose={() => setShowShareModal(false)}
+        outfitImage={file}
+        rating={finalRating}
+        style={finalStyle}
+        description={finalDescription}
+      />
     </motion.div>
   );
 };
