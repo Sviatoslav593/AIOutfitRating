@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://outfitrater.online/sitemap.xml
+
+# Disallow caching and build files
+Disallow: /_next/
+Disallow: /api/
+Disallow: /.next/
+
+# Allow important static files
+Allow: /favicon.ico
+Allow: /apple-touch-icon-180.svg
+Allow: /site.webmanifest
