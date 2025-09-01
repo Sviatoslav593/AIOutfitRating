@@ -5,7 +5,7 @@ import {
   storeMetrics,
 } from "../utils/metricsTracker";
 
-const StyleMetrics = ({ analysisResult, rating }) => {
+const StyleMetrics = ({ analysisResult, rating, style }) => {
   const [animationComplete, setAnimationComplete] = useState(false);
 
   // Extract and store metrics using the metrics tracker
@@ -15,35 +15,38 @@ const StyleMetrics = ({ analysisResult, rating }) => {
   // Use energy level from metrics data
   const energyLevel = metricsData.energyLevel;
 
+  // Check if this is a "not-an-outfit" case
+  const isNotOutfit = rating === 0 || style === "not-an-outfit" || (analysisResult && analysisResult.style === "not-an-outfit");
+
   const metricItems = [
     {
       name: "Fit",
       value: metrics.fit,
-      gradient: "from-pink-500 to-purple-600",
+      gradient: isNotOutfit ? "from-gray-400 to-gray-500" : "from-pink-500 to-purple-600",
       icon: "👔",
     },
     {
       name: "Color Match",
       value: metrics.colorMatch,
-      gradient: "from-purple-500 to-blue-600",
+      gradient: isNotOutfit ? "from-gray-400 to-gray-500" : "from-purple-500 to-blue-600",
       icon: "🎨",
     },
     {
       name: "Trendiness",
       value: metrics.trendiness,
-      gradient: "from-blue-500 to-cyan-500",
+      gradient: isNotOutfit ? "from-gray-400 to-gray-500" : "from-blue-500 to-cyan-500",
       icon: "✨",
     },
     {
       name: "Creativity",
       value: metrics.creativity,
-      gradient: "from-cyan-500 to-teal-500",
+      gradient: isNotOutfit ? "from-gray-400 to-gray-500" : "from-cyan-500 to-teal-500",
       icon: "🚀",
     },
     {
       name: "Era Vibe",
       value: metrics.eraVibe,
-      gradient: "from-orange-500 to-pink-500",
+      gradient: isNotOutfit ? "from-gray-400 to-gray-500" : "from-orange-500 to-pink-500",
       icon: "⏰",
     },
   ];
@@ -71,11 +74,15 @@ const StyleMetrics = ({ analysisResult, rating }) => {
         transition={{ delay: 1.4, duration: 0.6 }}
         className="mb-4 sm:mb-6"
       >
-        <h3 className="text-xl sm:text-2xl font-black text-transparent bg-gradient-to-r from-tiktok-pink to-tiktok-blue bg-clip-text mb-2">
+        <h3 className={`text-xl sm:text-2xl font-black text-transparent bg-gradient-to-r ${
+          isNotOutfit 
+            ? "from-gray-400 to-gray-500" 
+            : "from-tiktok-pink to-tiktok-blue"
+        } bg-clip-text mb-2`}>
           Style Metrics
         </h3>
         <p className="text-white/60 text-xs sm:text-sm">
-          Your outfit breakdown
+          {isNotOutfit ? "No outfit detected" : "Your outfit breakdown"}
         </p>
       </motion.div>
 
@@ -144,10 +151,12 @@ const StyleMetrics = ({ analysisResult, rating }) => {
       >
         <div className="flex items-center justify-between">
           <h4 className="text-white font-bold text-sm flex items-center">
-            <span className="mr-2">⚡</span>
-            Style Energy
+            <span className="mr-2">{isNotOutfit ? "❓" : "⚡"}</span>
+            {isNotOutfit ? "Detection Status" : "Style Energy"}
           </h4>
-          <span className="text-white/80 text-sm font-semibold">
+          <span className={`text-sm font-semibold ${
+            isNotOutfit ? "text-gray-400" : "text-white/80"
+          }`}>
             {energyLevel.level}
           </span>
         </div>
@@ -155,13 +164,27 @@ const StyleMetrics = ({ analysisResult, rating }) => {
         {/* Energy Level Bar Container */}
         <div className="relative h-6 bg-white/10 rounded-full overflow-hidden">
           {/* Background gradient zones */}
-          <div className="absolute inset-0 bg-gradient-to-r from-purple-500/30 via-cyan-500/30 to-pink-500/30 rounded-full" />
+          <div className={`absolute inset-0 rounded-full ${
+            isNotOutfit 
+              ? "bg-gradient-to-r from-gray-600/20 via-gray-500/20 to-gray-400/20" 
+              : "bg-gradient-to-r from-purple-500/30 via-cyan-500/30 to-pink-500/30"
+          }`} />
 
           {/* Zone Labels */}
           <div className="absolute inset-0 flex items-center justify-between px-2 text-[10px] text-white/50 font-medium">
-            <span>Calm</span>
-            <span>Balanced</span>
-            <span>Vibrant</span>
+            {isNotOutfit ? (
+              <>
+                <span>No</span>
+                <span>Outfit</span>
+                <span>Detected</span>
+              </>
+            ) : (
+              <>
+                <span>Calm</span>
+                <span>Balanced</span>
+                <span>Vibrant</span>
+              </>
+            )}
           </div>
 
           {/* Energy Indicator */}

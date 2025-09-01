@@ -6,6 +6,42 @@
  * Extract metrics from AI analysis result
  */
 export function extractMetricsFromAnalysis(analysisResult, rating) {
+  // Check if this is a "not-an-outfit" case
+  if (rating === 0 || (analysisResult && analysisResult.style === "not-an-outfit")) {
+    return {
+      timestamp: new Date().toISOString(),
+      rating: 0,
+      style: "not-an-outfit",
+      description: analysisResult?.description || "No outfit detected in the image",
+      metrics: {
+        fit: 0,
+        colorMatch: 0,
+        trendiness: 0,
+        creativity: 0,
+        eraVibe: 0,
+      },
+      energyLevel: {
+        level: "No Style Detected",
+        position: 0,
+        color: "#6B7280",
+        intensity: "none",
+      },
+      styleCategories: ["not-detected"],
+      colorAnalysis: {
+        mentionedColors: [],
+        colorCount: 0,
+        hasColorMention: false,
+        dominantColor: null,
+      },
+      confidenceScores: {
+        sentiment: 0,
+        rating: 0,
+        overall: 0,
+      },
+      source: "not-outfit",
+    };
+  }
+
   if (!analysisResult) {
     return generateFallbackMetrics(rating);
   }
@@ -289,6 +325,42 @@ function calculateEnergyLevel(metrics) {
  * Generate fallback metrics when no AI analysis is available
  */
 function generateFallbackMetrics(rating) {
+  // If rating is 0, return zero metrics (not an outfit)
+  if (rating === 0) {
+    return {
+      timestamp: new Date().toISOString(),
+      rating: 0,
+      style: "not-an-outfit",
+      description: "No outfit detected in the image",
+      metrics: {
+        fit: 0,
+        colorMatch: 0,
+        trendiness: 0,
+        creativity: 0,
+        eraVibe: 0,
+      },
+      energyLevel: {
+        level: "No Style Detected",
+        position: 0,
+        color: "#6B7280",
+        intensity: "none",
+      },
+      styleCategories: ["not-detected"],
+      colorAnalysis: {
+        mentionedColors: [],
+        colorCount: 0,
+        hasColorMention: false,
+        dominantColor: null,
+      },
+      confidenceScores: {
+        sentiment: 0,
+        rating: 0,
+        overall: 0,
+      },
+      source: "not-outfit",
+    };
+  }
+
   const baseScore = rating * 8;
 
   const metrics = {

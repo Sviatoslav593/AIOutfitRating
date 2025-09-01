@@ -176,7 +176,11 @@ const ResultCard = ({ file, analysisResult }) => {
 
       {/* Style Metrics */}
       <div className="mt-6">
-        <StyleMetrics analysisResult={analysisResult} rating={finalRating} />
+        <StyleMetrics 
+          analysisResult={analysisResult} 
+          rating={finalRating}
+          style={finalStyle}
+        />
       </div>
 
       {/* Share Modal */}
