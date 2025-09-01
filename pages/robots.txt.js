@@ -24,11 +24,8 @@ export async function getServerSideProps({ res }) {
   // Generate the robots.txt
   const robotsTxt = generateRobotsTxt();
 
-  res.setHeader("Content-Type", "text/plain");
-  res.setHeader(
-    "Cache-Control",
-    "public, s-maxage=86400, stale-while-revalidate"
-  );
+  res.setHeader("Content-Type", "text/plain; charset=utf-8");
+  res.setHeader("Cache-Control", "public, max-age=86400, must-revalidate");
 
   // Send the robots.txt to the browser
   res.write(robotsTxt);
