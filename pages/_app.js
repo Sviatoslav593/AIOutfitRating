@@ -41,6 +41,9 @@ export default function App({ Component, pageProps }) {
         {/* Bing Webmaster Tools Verification - Replace with your actual code */}
         <meta name="msvalidate.01" content="YOUR_BING_VERIFICATION_CODE_HERE" />
 
+        {/* Google AdSense */}
+        <meta name="google-adsense-account" content="ca-pub-4616343080553569" />
+
         {/* Canonical URL */}
         <link rel="canonical" href="https://www.outfitrater.online" />
 
