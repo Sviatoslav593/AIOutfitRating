@@ -29,32 +29,7 @@ const nextConfig = {
           },
         ],
       },
-      {
-        source: '/sitemap.xml',
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'application/xml',
-          },
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=86400, stale-while-revalidate',
-          },
-        ],
-      },
-      {
-        source: '/robots.txt',
-        headers: [
-          {
-            key: 'Content-Type',
-            value: 'text/plain',
-          },
-          {
-            key: 'Cache-Control',
-            value: 'public, max-age=86400, stale-while-revalidate',
-          },
-        ],
-      },
+
     ];
   },
   // Optimize bundle
