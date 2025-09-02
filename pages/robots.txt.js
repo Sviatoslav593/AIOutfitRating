@@ -13,6 +13,7 @@ Disallow: /.next/
 # Allow important static files
 Allow: /favicon.ico
 Allow: /apple-touch-icon-180.svg
+Allow: /ads.txt
 Allow: /site.webmanifest`;
 }
 
